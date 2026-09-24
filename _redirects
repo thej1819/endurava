@@ -1,0 +1,6 @@
+/about /about/index.html 200
+/services /services/index.html 200
+/testimonials /testimonials/index.html 200
+/contact /contact/index.html 200
+/success-stories /testimonials 301
+/courses /contact 301
