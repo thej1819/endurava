@@ -1,49 +1,34 @@
 /**
- * Cloudflare Pages Function: POST /api/contact
+ * Endurava Technologies — Worker entry point.
  *
- * Receives contact-form submissions from contact/index.html and stores
- * them in Cloudflare D1 (a serverless SQL database bound to this Pages
- * project) — one table per form type: hiring_leads, career_leads,
- * general_leads. No external account, no API token to manage.
+ * This project deploys via `wrangler deploy` (Cloudflare Workers with
+ * static assets), not classic Cloudflare Pages — so server-side logic
+ * lives here as manual routing, not in a /functions folder (that
+ * file-based convention only applies to Pages and is ignored here).
  *
- * Setup (one-time):
- *   1. Cloudflare dashboard -> Workers & Pages -> D1 -> Create database
- *      (e.g. name it "endurava-leads")
- *   2. Open its Console tab and run the CREATE TABLE statements below
- *      once, to create hiring_leads / career_leads / general_leads
- *   3. Back in your Pages project -> Settings -> Functions ->
- *      D1 database bindings -> add binding, Variable name: DB,
- *      pointing at the database you created
- *   4. Redeploy (bindings apply on the next deployment)
- *
- * --- SQL to run once in the D1 Console ---
- *
- * CREATE TABLE hiring_leads (
- *   id INTEGER PRIMARY KEY AUTOINCREMENT,
- *   created_at TEXT DEFAULT (datetime('now')),
- *   company TEXT, contact_name TEXT, contact_email TEXT, contact_phone TEXT,
- *   role TEXT, tech_stack TEXT, timeline TEXT, message TEXT,
- *   status TEXT DEFAULT 'New'
- * );
- *
- * CREATE TABLE career_leads (
- *   id INTEGER PRIMARY KEY AUTOINCREMENT,
- *   created_at TEXT DEFAULT (datetime('now')),
- *   candidate_name TEXT, candidate_email TEXT, candidate_phone TEXT,
- *   experience_level TEXT, current_skills TEXT, interests TEXT, career_goals TEXT,
- *   status TEXT DEFAULT 'New'
- * );
- *
- * CREATE TABLE general_leads (
- *   id INTEGER PRIMARY KEY AUTOINCREMENT,
- *   created_at TEXT DEFAULT (datetime('now')),
- *   inquiry_name TEXT, inquiry_email TEXT, inquiry_company TEXT,
- *   inquiry_subject TEXT, inquiry_message TEXT,
- *   status TEXT DEFAULT 'New'
- * );
+ * Static files (html/css/js, _redirects) are served via the ASSETS
+ * binding declared in wrangler.toml. Only /api/* routes are handled
+ * below; every other request falls through to the static site.
  */
 
-export async function onRequestPost({ request, env }) {
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+
+    if (url.pathname === '/api/contact' && request.method === 'POST') {
+      return handleContact(request, env);
+    }
+
+    return env.ASSETS.fetch(request);
+  },
+};
+
+/**
+ * Stores contact-form submissions in D1 — one table per form type:
+ * hiring_leads, career_leads, general_leads. See wrangler.toml for the
+ * D1 binding and the project notes for the CREATE TABLE statements.
+ */
+async function handleContact(request, env) {
   let data;
   try {
     data = await request.json();
@@ -63,7 +48,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   if (!env.DB) {
-    console.error('D1 binding "DB" is not configured for this Pages project.');
+    console.error('D1 binding "DB" is not configured for this Worker.');
     return jsonError('Unable to save your submission right now. Please email us directly.', 500);
   }
 

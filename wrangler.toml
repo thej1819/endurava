@@ -1,0 +1,12 @@
+name = "endurava"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+
+[assets]
+directory = "."
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "endurava-leads"
+database_id = "0dd453c2-d44e-4fc9-a383-b60f79b248f6"
