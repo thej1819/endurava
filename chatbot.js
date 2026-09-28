@@ -9,23 +9,23 @@
 const KNOWLEDGE_BASE = [
   {
     keywords: ['contact', 'email', 'phone', 'address', 'reach you'],
-    response: "📞 **Contact Information:**\n\n📧 Email: admin@enduravatech.com\n📱 Phone: +91 77805 80473\n📍 Location: Hyderabad, Telangana, India\n\nOr visit our contact page for a form!",
+    response: "**Contact Information:**\n\nEmail: admin@enduravatech.com\nPhone: +91 77805 80473\nLocation: Hyderabad, Telangana, India\n\nOr visit our contact page for a form!",
   },
   {
     keywords: ['pricing', 'cost', 'fee', 'fees', 'price', 'charges'],
-    response: "Great question! Pricing depends on what you need:\n\n💼 **Recruitment**: Performance-based or retained search\n📚 **Training**: Flexible course pricing with payment plans\n\nShare a bit more about what you're looking for and I'll point you the right way, or contact our team for a custom quote!",
+    response: "Great question! Pricing depends on what you need:\n\n**Recruitment**: Performance-based or retained search\n**Training**: Flexible course pricing with payment plans\n\nShare a bit more about what you're looking for and I'll point you the right way, or contact our team for a custom quote!",
   },
   {
     keywords: ['success', 'testimonial', 'review', 'rating'],
-    response: "We're proud of our impact! ✨\n\nCheck out our Testimonials page to see real stories from:\n• Technology professionals who advanced their careers\n• Companies who built exceptional teams\n\nVisit: /testimonials",
+    response: "We're proud of our impact!\n\nCheck out our Testimonials page to see real stories from:\n• Technology professionals who advanced their careers\n• Companies who built exceptional teams\n\nVisit: /testimonials",
   },
   {
     keywords: ['thank', 'thanks', 'bye', 'goodbye', 'see you'],
-    response: "You're welcome! 😊 Feel free to come back anytime you have a question. Have a great day!",
+    response: "You're welcome! Feel free to come back anytime you have a question. Have a great day!",
   },
   {
     keywords: ['location', 'office', 'where are you', 'based', 'city'],
-    response: "📍 We're based in Hyderabad, Telangana, India, and work with clients and talent across India (many roles and courses are remote-friendly).",
+    response: "We're based in Hyderabad, Telangana, India, and work with clients and talent across India (many roles and courses are remote-friendly).",
   },
   {
     keywords: ['duration', 'how long', 'weeks', 'months long'],
@@ -65,7 +65,7 @@ const KNOWLEDGE_BASE = [
   },
   {
     keywords: ['company', 'about', 'mission', 'vision', 'culture', 'who are you', 'what do you do'],
-    response: "We're Endurava Technologies! 🌟\n\nWe connect ambitious technology professionals with visionary organizations. Our mission:\n• **Hire smarter** with AI-driven recruitment\n• **Build stronger** with specialized talent\n• **Grow with AI** as a key differentiator\n\nWhat would you like to know more about — hiring, careers, or training?",
+    response: "We're Endurava Technologies!\n\nWe connect ambitious technology professionals with visionary organizations. Our mission:\n• **Hire smarter** with AI-driven recruitment\n• **Build stronger** with specialized talent\n• **Grow with AI** as a key differentiator\n\nWhat would you like to know more about — hiring, careers, or training?",
   },
   {
     keywords: ['working hours', 'office hours', 'available', 'business hours'],
@@ -73,11 +73,11 @@ const KNOWLEDGE_BASE = [
   },
   {
     keywords: ['linkedin', 'instagram', 'facebook', 'social media'],
-    response: "You can find us on LinkedIn, Instagram and Facebook — links are in the footer of every page! 🌐",
+    response: "You can find us on LinkedIn, Instagram and Facebook — links are in the footer of every page!",
   },
   {
     keywords: ['why endurava', 'why choose you', 'what makes you different', 'why should i'],
-    response: "A few reasons teams and talent choose us:\n• 🎯 Technology-first, specialized focus (not generalist staffing)\n• 🤖 AI-assisted matching and recruitment\n• 📚 We train **and** place — not just one or the other\n• 🤝 Long-term relationships, not one-off placements",
+    response: "A few reasons teams and talent choose us:\n• Technology-first, specialized focus (not generalist staffing)\n• AI-assisted matching and recruitment\n• We train **and** place — not just one or the other\n• Long-term relationships, not one-off placements",
   },
   {
     keywords: ['industries', 'sectors', 'domains'],
@@ -85,7 +85,7 @@ const KNOWLEDGE_BASE = [
   },
   {
     keywords: ['hello', 'hi', 'hey', 'hii', 'yo'],
-    response: "Hey there! 👋 Great to meet you. How can I help — hiring, careers, or training?",
+    response: "Hey there! Great to meet you. How can I help — hiring, careers, or training?",
   },
 ];
 
@@ -98,21 +98,20 @@ const TECH_STACK_KEYWORDS = [
   'salesforce', 'servicenow', 'sap', 'oracle', 'machine learning', 'ml',
 ];
 
+const CHAT_ICON_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H8l-4 4V4Z"/></svg>';
+const CLOSE_ICON_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>';
+
 class EvaChat {
   constructor() {
     this.isOpen = false;
     this.currentFlow = null;
     this.messages = [];
-    this.missStreak = 0;
-    this.hasEngaged = false;
-    this.nudgeTimer = null;
     this.init();
   }
 
   init() {
     this.createChatUI();
     this.attachEventListeners();
-    this.scheduleNudge();
   }
 
   createChatUI() {
@@ -120,10 +119,9 @@ class EvaChat {
       <div id="eva-chat-container" class="chat-container">
         <!-- Floating Button -->
         <button id="chat-toggle-btn" class="chat-toggle-btn" title="Chat with Eva">
-          <span class="chat-icon">💬</span>
+          <span class="chat-icon">${CHAT_ICON_SVG}</span>
           <span class="chat-badge" style="display:none">●</span>
         </button>
-        <span id="chat-nudge" class="chat-nudge" style="display:none">Need help? 👋</span>
 
         <!-- Chat Window -->
         <div id="chat-window" class="chat-window" style="display:none">
@@ -132,7 +130,7 @@ class EvaChat {
               <h3>Eva</h3>
               <p>Endurava's virtual assistant</p>
             </div>
-            <button id="chat-close-btn" class="chat-close-btn">✕</button>
+            <button id="chat-close-btn" class="chat-close-btn">${CLOSE_ICON_SVG}</button>
           </div>
 
           <div class="chat-messages" id="chat-messages">
@@ -161,47 +159,15 @@ class EvaChat {
     const toggleBtn = document.getElementById('chat-toggle-btn');
     const closeBtn = document.getElementById('chat-close-btn');
     const inputField = document.getElementById('chat-input');
-    const nudge = document.getElementById('chat-nudge');
 
     toggleBtn.addEventListener('click', () => this.toggleChat());
     closeBtn.addEventListener('click', () => this.closeChat());
-    nudge.addEventListener('click', () => this.openChat());
     inputField.addEventListener('keypress', (e) => {
       if (e.key === 'Enter' && inputField.value.trim()) {
         this.handleUserInput(inputField.value.trim());
         inputField.value = '';
       }
     });
-  }
-
-  // Shows a small "Need help?" bubble once per browser session if the
-  // visitor hasn't opened the chat yet, then gets out of the way.
-  scheduleNudge() {
-    let alreadyNudged = false;
-    try {
-      alreadyNudged = sessionStorage.getItem('eva_chat_nudged') === '1';
-    } catch {
-      // sessionStorage unavailable (private browsing etc.) — just skip the nudge
-      return;
-    }
-    if (alreadyNudged) return;
-
-    this.nudgeTimer = setTimeout(() => {
-      if (this.hasEngaged || this.isOpen) return;
-      const nudge = document.getElementById('chat-nudge');
-      if (!nudge) return;
-      nudge.style.display = 'block';
-      try {
-        sessionStorage.setItem('eva_chat_nudged', '1');
-      } catch {
-        // ignore
-      }
-    }, 10000);
-  }
-
-  hideNudge() {
-    const nudge = document.getElementById('chat-nudge');
-    if (nudge) nudge.style.display = 'none';
   }
 
   toggleChat() {
@@ -215,9 +181,6 @@ class EvaChat {
     chatWindow.style.display = 'flex';
     toggleBtn.classList.add('active');
     this.isOpen = true;
-    this.hasEngaged = true;
-    clearTimeout(this.nudgeTimer);
-    this.hideNudge();
 
     // Show welcome message if first time
     if (this.messages.length === 0) {
@@ -235,12 +198,12 @@ class EvaChat {
   }
 
   showWelcome() {
-    this.addMessage('bot', "👋 Hi, I'm Eva — Endurava's virtual assistant. I can help with hiring, career opportunities, or training. What brings you here today?", true);
+    this.addMessage('bot', "Hi, I'm Eva — Endurava's virtual assistant. I can help with hiring, career opportunities, or training. What brings you here today?", true);
     this.showQuickReplies([
-      { label: '💼 I\'m Hiring', action: 'hiring' },
-      { label: '🚀 Career Opportunities', action: 'career' },
-      { label: '📚 Training & Courses', action: 'training' },
-      { label: '❓ General Question', action: 'general' }
+      { label: "I'm Hiring", action: 'hiring' },
+      { label: 'Career Opportunities', action: 'career' },
+      { label: 'Training & Courses', action: 'training' },
+      { label: 'General Question', action: 'general' }
     ]);
   }
 
@@ -260,7 +223,6 @@ class EvaChat {
   handleQuickReply(action) {
     if (action === 'restart') {
       this.currentFlow = null;
-      this.missStreak = 0;
       this.showWelcome();
       return;
     }
@@ -293,7 +255,6 @@ class EvaChat {
     if (!selected) return;
     this.addMessage('user', selected.message);
     this.currentFlow = selected.flow;
-    this.missStreak = 0;
     this.handleConversation(selected.flow);
   }
 
@@ -332,7 +293,7 @@ class EvaChat {
         },
         {
           keywords: ['ai', 'ml', 'machine', 'learning', 'genai', 'generative'],
-          response: "Excellent! AI talent is our specialty. 🤖 We have access to engineers skilled in:\n• Generative AI & LLM systems\n• Agentic AI\n• Machine Learning & Data Engineering\n• AI-first full-stack development\n\nWhat's your timeline and team size?",
+          response: "Excellent! AI talent is our specialty. We have access to engineers skilled in:\n• Generative AI & LLM systems\n• Agentic AI\n• Machine Learning & Data Engineering\n• AI-first full-stack development\n\nWhat's your timeline and team size?",
           nextAction: 'hiring_timeline'
         },
         {
@@ -349,14 +310,14 @@ class EvaChat {
         },
         {
           keywords: ['job', 'role', 'position', 'opportunity', 'placement'],
-          response: "We'd love to help you find the right opportunity! 🎯\n\nOnce you complete our training or validate your skills, we connect qualified candidates with our partner organizations. Many of our learners get placed within 3-6 months.\n\nWhat's your current skill level?",
+          response: "We'd love to help you find the right opportunity! Once you complete our training or validate your skills, we connect qualified candidates with our partner organizations. Many of our learners get placed within 3-6 months.\n\nWhat's your current skill level?",
           nextAction: 'career_level'
         }
       ],
       training_flow: [
         {
           keywords: ['ai', 'machine', 'learning', 'genai'],
-          response: "Our AI-focused courses are perfect for building future-ready skills! 🚀\n\n**AI & Generative AI Fundamentals** (4 weeks)\n**AI & ML Fundamentals** (8 weeks)\n**Data Engineering for AI** (10 weeks)\n**Full-Stack + AI** (12 weeks)\n\nWhat's your experience level?",
+          response: "Our AI-focused courses are perfect for building future-ready skills!\n\n**AI & Generative AI Fundamentals** (4 weeks)\n**AI & ML Fundamentals** (8 weeks)\n**Data Engineering for AI** (10 weeks)\n**Full-Stack + AI** (12 weeks)\n\nWhat's your experience level?",
           nextAction: 'training_level'
         },
         {
@@ -368,7 +329,7 @@ class EvaChat {
       general_flow: [
         {
           keywords: ['company', 'about', 'mission', 'vision', 'culture'],
-          response: "We're Endurava Technologies! 🌟\n\nWe connect ambitious technology professionals with visionary organizations. Our mission:\n• **Hire smarter** with AI-driven recruitment\n• **Build stronger** with specialized talent\n• **Grow with AI** as a key differentiator\n\nWe specialize in technology recruitment and AI-first training.\n\nWhat would you like to know more about?",
+          response: "We're Endurava Technologies!\n\nWe connect ambitious technology professionals with visionary organizations. Our mission:\n• **Hire smarter** with AI-driven recruitment\n• **Build stronger** with specialized talent\n• **Grow with AI** as a key differentiator\n\nWe specialize in technology recruitment and AI-first training.\n\nWhat would you like to know more about?",
           nextAction: 'general_followup'
         }
       ]
@@ -378,18 +339,17 @@ class EvaChat {
 
     for (let step of flowSteps) {
       if (step.keywords.some(kw => input.toLowerCase().includes(kw))) {
-        this.missStreak = 0;
         this.addMessage('bot', step.response, true);
 
         if (step.nextAction === 'hiring_contact' || step.nextAction === 'training_enroll') {
           this.showQuickReplies([
-            { label: '📞 Contact Our Team', action: 'contact_form' },
+            { label: 'Contact Our Team', action: 'contact_form' },
             { label: '← Back to Main Menu', action: 'restart' }
           ]);
         } else {
           this.showQuickReplies([
             { label: '← Back to Main Menu', action: 'restart' },
-            { label: '📧 Contact Us', action: 'contact_form' }
+            { label: 'Contact Us', action: 'contact_form' }
           ]);
         }
         return;
@@ -400,11 +360,10 @@ class EvaChat {
     // base before giving up, so a question never dead-ends mid-flow.
     const knowledgeMatch = this.findKnowledgeMatch(input);
     if (knowledgeMatch) {
-      this.missStreak = 0;
       this.addMessage('bot', knowledgeMatch, true);
       this.showQuickReplies([
         { label: '← Back to Main Menu', action: 'restart' },
-        { label: '📧 Contact Us', action: 'contact_form' }
+        { label: 'Contact Us', action: 'contact_form' }
       ]);
       return;
     }
@@ -413,7 +372,7 @@ class EvaChat {
   }
 
   hiringFlow() {
-    this.addMessage('bot', "Let's find your perfect team! 💼\n\nI have a few quick questions:\n\n1️⃣ What types of roles are you looking to fill?", true);
+    this.addMessage('bot', "Let's find your perfect team!\n\nI have a few quick questions:\n\n1. What types of roles are you looking to fill?", true);
     this.showQuickReplies([
       { label: 'AI/ML Engineers', action: 'hiring' },
       { label: 'Full-Stack Developers', action: 'hiring' },
@@ -423,32 +382,32 @@ class EvaChat {
   }
 
   careerFlow() {
-    this.addMessage('bot', "Exciting! Let's build your tech career path. 🚀\n\nAre you interested in:", true);
+    this.addMessage('bot', "Exciting! Let's build your tech career path. Are you interested in:", true);
     this.showQuickReplies([
-      { label: '📚 Learning New Skills', action: 'career' },
-      { label: '💼 Finding Job Opportunities', action: 'career' },
-      { label: '🎓 Career Guidance', action: 'career' },
+      { label: 'Learning New Skills', action: 'career' },
+      { label: 'Finding Job Opportunities', action: 'career' },
+      { label: 'Career Guidance', action: 'career' },
       { label: 'Both Training & Jobs', action: 'career' }
     ]);
   }
 
   trainingFlow() {
-    this.addMessage('bot', "Perfect! Our training programs are designed for modern tech careers. 📖\n\nWhat interests you most?", true);
+    this.addMessage('bot', "Perfect! Our training programs are designed for modern tech careers. What interests you most?", true);
     this.showQuickReplies([
-      { label: '🤖 AI & Machine Learning', action: 'training' },
-      { label: '💻 Full-Stack Development', action: 'training' },
-      { label: '☁️ Cloud Engineering', action: 'training' },
-      { label: '📊 Data & DevOps', action: 'training' }
+      { label: 'AI & Machine Learning', action: 'training' },
+      { label: 'Full-Stack Development', action: 'training' },
+      { label: 'Cloud Engineering', action: 'training' },
+      { label: 'Data & DevOps', action: 'training' }
     ]);
   }
 
   generalFlow() {
-    this.addMessage('bot', "Great! Happy to help. ✨\n\nWe specialize in:\n• 🎯 Technology Recruitment & Staffing\n• 📚 Modern Tech Training Programs\n• 🚀 Career Development Support\n• 🤖 AI-First Solutions\n\nWhat would you like to know more about?", true);
+    this.addMessage('bot', "Great! Happy to help. We specialize in:\n• Technology Recruitment & Staffing\n• Modern Tech Training Programs\n• Career Development Support\n• AI-First Solutions\n\nWhat would you like to know more about?", true);
     this.showQuickReplies([
-      { label: '💼 Our Services', action: 'general' },
-      { label: '📖 Training Programs', action: 'general' },
-      { label: '🌟 Testimonials', action: 'general' },
-      { label: '📞 Contact Info', action: 'contact_form' }
+      { label: 'Our Services', action: 'general' },
+      { label: 'Training Programs', action: 'general' },
+      { label: 'Testimonials', action: 'general' },
+      { label: 'Contact Info', action: 'contact_form' }
     ]);
   }
 
@@ -475,11 +434,10 @@ class EvaChat {
     const match = this.findKnowledgeMatch(input);
 
     if (match) {
-      this.missStreak = 0;
       this.addMessage('bot', match, true);
       this.showQuickReplies([
-        { label: '🏠 Main Menu', action: 'restart' },
-        { label: '📞 Contact Team', action: 'contact_form' }
+        { label: 'Main Menu', action: 'restart' },
+        { label: 'Contact Team', action: 'contact_form' }
       ]);
       return;
     }
@@ -487,27 +445,14 @@ class EvaChat {
     this.registerMiss();
   }
 
-  // Tracks consecutive "I don't understand" responses. After a couple of
-  // misses in a row, hand off to a human instead of repeating the same
-  // generic apology.
+  // Anything outside the knowledge base goes straight to a human handoff
+  // rather than guessing — Eva only answers what she actually knows.
   registerMiss() {
-    this.missStreak += 1;
-
-    if (this.missStreak >= 2) {
-      this.showContactHandoff();
-      return;
-    }
-
-    this.addMessage('bot', "I'm not quite sure about that. Could you rephrase, or would you like to contact our team directly for personalized guidance?", true);
-    this.showQuickReplies([
-      { label: '📞 Contact Our Team', action: 'contact_form' },
-      { label: '← Start Over', action: 'restart' }
-    ]);
+    this.showContactHandoff();
   }
 
   showContactHandoff() {
-    this.missStreak = 0;
-    this.addMessage('bot', "Let me connect you with our team directly so you get the right answer. 📞\n\n📧 Email: admin@enduravatech.com\n📱 Phone: +91 77805 80473\n\nOr use the form on our Contact page!", true);
+    this.addMessage('bot', "That's outside what I can help with directly — please reach out to our team:\n\nEmail: admin@enduravatech.com\nPhone: +91 77805 80473\n\nOr use the form on our Contact page!", true);
     this.showQuickReplies([
       { label: '← Back to Main Menu', action: 'restart' }
     ]);
@@ -520,7 +465,7 @@ class EvaChat {
 
     if (sender === 'bot') {
       messageDiv.innerHTML = `
-        <div class="message-avatar">🤖</div>
+        <div class="message-avatar">E</div>
         <div class="message-content">${this.escapeHtml(text).replace(/\n/g, '<br>')}</div>
       `;
     } else {

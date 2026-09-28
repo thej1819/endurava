@@ -15,6 +15,13 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // Canonical domain: redirect the bare apex (enduravatech.com) to
+    // www so the site isn't served as duplicate content on two hosts.
+    if (url.hostname === 'enduravatech.com') {
+      url.hostname = 'www.enduravatech.com';
+      return Response.redirect(url.toString(), 301);
+    }
+
     if (url.pathname === '/api/contact' && request.method === 'POST') {
       return handleContact(request, env);
     }
