@@ -248,6 +248,16 @@
       });
     });
 
+    // Open the relevant existing contact path when linked from the navigation.
+    const contactType = new URLSearchParams(window.location.search).get('type');
+    if (contactType === 'hiring' || contactType === 'career' || contactType === 'partnership') {
+      const selectedRadio = document.getElementById(contactType);
+      if (selectedRadio) {
+        selectedRadio.checked = true;
+        selectedRadio.dispatchEvent(new Event('change'));
+      }
+    }
+
     // Form submission handlers — posts to the /api/contact function,
     // which emails the submission to the team.
     document.querySelectorAll('.contact-form').forEach(form => {
